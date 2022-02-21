@@ -11,4 +11,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-// 3º Aula - 00:54:00
+// 3º Aula - 01:02:00 - useParams in room code
