@@ -10,7 +10,9 @@ import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
 
 import LogoImg from "../assets/images/logo.svg";
+import CheckImg from "../assets/images/check.svg";
 import DeleteImg from "../assets/images/delete.svg";
+import AnswerImg from "../assets/images/answer.svg";
 
 import "../styles/room.scss";
 
@@ -48,6 +50,18 @@ export function AdminRoom() {
     navigate("/");
   }
 
+  async function handleHighlightQuestion(questionId: string) {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isHighlighted: true,
+    });
+  }
+
+  async function handleCheckQuestionAsAnswer(questionId: string) {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isAnswered: true,
+    });
+  }
+
   function toggleModalEndRoom() {
     setShowModalEndRoom(!showModalEndRoom);
   }
@@ -83,19 +97,44 @@ export function AdminRoom() {
               key={question.id}
               author={question.author}
               content={question.content}
+              isAnswered={question.isAnswered}
+              isHighlighted={question.isHighlighted}
             >
-              <button
-                type="button"
-                onClick={() => {
-                  if (questionIdToDelete !== question.id) {
-                    setQuestionIdToDelete(question.id);
-                  }
+              <div>
+                {!question.isAnswered && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleCheckQuestionAsAnswer(question.id)}
+                    >
+                      <img
+                        src={CheckImg}
+                        alt="Marcar pergunta como respondida"
+                      />
+                    </button>
 
-                  toggleModalDeleteQuestion();
-                }}
-              >
-                <img src={DeleteImg} alt="Remover pergunta" />
-              </button>
+                    <button
+                      type="button"
+                      onClick={() => handleHighlightQuestion(question.id)}
+                    >
+                      <img src={AnswerImg} alt="Dar destaque à pergunta" />
+                    </button>
+                  </>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (questionIdToDelete !== question.id) {
+                      setQuestionIdToDelete(question.id);
+                    }
+
+                    toggleModalDeleteQuestion();
+                  }}
+                >
+                  <img src={DeleteImg} alt="Remover pergunta" />
+                </button>
+              </div>
             </Question>
           ))}
         </div>
