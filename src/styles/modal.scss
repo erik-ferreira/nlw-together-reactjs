@@ -1,0 +1,43 @@
+.modal {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .content {
+    width: 580px;
+    height: 350px;
+    border-radius: 8px;
+    background: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    h2 {
+      font-family: "Poppins", sans-serif;
+      font-size: 24px;
+      color: #29292e;
+    }
+
+    p {
+      color: #29292e;
+    }
+
+    > div {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

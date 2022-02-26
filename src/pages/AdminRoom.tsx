@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { Modal } from "../components/Modal";
 import { Button } from "../components/Button";
 import { RoomCode } from "../components/RoomCode";
 import { Question } from "../components/Question";
 
-// import { useAuth } from "../hooks/useAuth";
 import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
 
@@ -24,10 +25,19 @@ export function AdminRoom() {
   const { title, questions } = useRoom(roomId);
   const navigate = useNavigate();
 
-  async function handleDeleteQuestion(questionId: string) {
-    if (window.confirm("Tem certeza que deseja excluir essa pergunta?")) {
-      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
-    }
+  const [questionIdToDelete, setQuestionIdToDelete] = useState<string>("");
+
+  const [showModalEndRoom, setShowModalEndRoom] = useState<boolean>(false);
+  const [showModalDeleteQuestion, setShowModalDeleteQuestion] =
+    useState<boolean>(false);
+
+  async function handleDeleteQuestion() {
+    await database
+      .ref(`rooms/${roomId}/questions/${questionIdToDelete}`)
+      .remove();
+
+    toggleModalDeleteQuestion();
+    setQuestionIdToDelete("");
   }
 
   async function handleEndRoom() {
@@ -38,6 +48,14 @@ export function AdminRoom() {
     navigate("/");
   }
 
+  function toggleModalEndRoom() {
+    setShowModalEndRoom(!showModalEndRoom);
+  }
+
+  function toggleModalDeleteQuestion() {
+    setShowModalDeleteQuestion(!showModalDeleteQuestion);
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -46,7 +64,7 @@ export function AdminRoom() {
 
           <div>
             <RoomCode code={roomId || "Sem código"} />
-            <Button isOutlined onClick={handleEndRoom}>
+            <Button isOutlined onClick={toggleModalEndRoom}>
               Encerrar sala
             </Button>
           </div>
@@ -68,7 +86,13 @@ export function AdminRoom() {
             >
               <button
                 type="button"
-                onClick={() => handleDeleteQuestion(question.id)}
+                onClick={() => {
+                  if (questionIdToDelete !== question.id) {
+                    setQuestionIdToDelete(question.id);
+                  }
+
+                  toggleModalDeleteQuestion();
+                }}
               >
                 <img src={DeleteImg} alt="Remover pergunta" />
               </button>
@@ -76,6 +100,22 @@ export function AdminRoom() {
           ))}
         </div>
       </main>
+
+      {showModalEndRoom && (
+        <Modal
+          typeModal="end-room"
+          toggleModal={toggleModalEndRoom}
+          handleConfirm={handleEndRoom}
+        />
+      )}
+
+      {showModalDeleteQuestion && (
+        <Modal
+          typeModal="delete-question"
+          toggleModal={toggleModalDeleteQuestion}
+          handleConfirm={handleDeleteQuestion}
+        />
+      )}
     </div>
   );
 }
