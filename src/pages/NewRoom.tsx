@@ -2,12 +2,12 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "../components/Button";
+import { AsidePresentationLeft } from "../components/AsidePresentationLeft";
 
 import { database } from "../services/firebase";
 import { useAuth } from "../hooks/useAuth";
 
 import LogoImg from "../assets/images/logo.svg";
-import IllustrationImg from "../assets/images/illustration.svg";
 
 import "../styles/auth.scss";
 
@@ -36,14 +36,7 @@ export function NewRoom() {
 
   return (
     <div id="page-auth">
-      <aside>
-        <img
-          src={IllustrationImg}
-          alt="Ilustração simbolizando perguntas e respostas"
-        />
-        <strong>Crie salas de Q&amp;A ao-vivo</strong>
-        <p>Tire as dúvidas da sua audiência em tempo real</p>
-      </aside>
+      <AsidePresentationLeft />
 
       <main>
         <div className="main-content">

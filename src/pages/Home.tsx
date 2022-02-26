@@ -5,10 +5,10 @@ import { useAuth } from "../hooks/useAuth";
 import { database } from "../services/firebase";
 
 import { Button } from "../components/Button";
+import { AsidePresentationLeft } from "../components/AsidePresentationLeft";
 
 import LogoImg from "../assets/images/logo.svg";
 import GoogleIconImg from "../assets/images/google-icon.svg";
-import IllustrationImg from "../assets/images/illustration.svg";
 
 import "../styles/auth.scss";
 
@@ -50,14 +50,7 @@ export function Home() {
 
   return (
     <div id="page-auth">
-      <aside>
-        <img
-          src={IllustrationImg}
-          alt="Ilustração simbolizando perguntas e respostas"
-        />
-        <strong>Crie salas de Q&amp;A ao-vivo</strong>
-        <p>Tire as dúvidas da sua audiência em tempo real</p>
-      </aside>
+      <AsidePresentationLeft />
 
       <main>
         <div className="main-content">
